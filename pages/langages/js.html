@@ -250,25 +250,108 @@
             </div>
         </section>
 
-        <!-- Récapitulatif (sera rempli dynamiquement plus tard) -->
+        <!-- Tableau récapitulatif -->
         <section style="margin-top: 50px;">
-            <h2>Récapitulatif des règles JS</h2>
-            <p>Cliquez sur une règle pour accéder aux détails et exemples.</p>
-            <table class="summary-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Règle</th>
-                        <th>Gain CPU</th>
-                        <th>Gain Mémoire</th>
-                        <th>Impact</th>
-                    </tr>
-                </thead>
-                <tbody id="rules-summary">
-                    <!-- À remplir dynamiquement avec JS ou statiquement par la suite -->
-                </tbody>
-            </table>
+        <h2>Récapitulatif des 10 éco-règles JavaScript</h2>
+        <p>Cliquez sur une règle pour accéder directement aux détails et exemples de code.</p>
+
+        <table class="summary-table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Règle</th>
+                <th>Éco-responsabilité</th>
+                <th>Bonne pratique</th>
+                <th>Gain estimé</th>
+                <th>Impact</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr onclick="location.href='#rule1'" style="cursor: pointer;">
+                <td>1</td>
+                <td><strong>throttle_events</strong></td>
+                <td>Réduire le CPU & batterie liés aux scroll/input</td>
+                <td>Utiliser throttle() ou debounce()</td>
+                <td>CPU -30 à -90%, autonomie +20% sur mobile</td>
+                <td><span class="impact-badge impact-high">⭐⭐⭐</span></td>
+            </tr>
+            <tr onclick="location.href='#rule2'" style="cursor: pointer;">
+                <td>2</td>
+                <td><strong>lazy_load_js</strong></td>
+                <td>Réduire JS initialement chargé</td>
+                <td>Lazy loading des modules</td>
+                <td>-200 à -800 KB transférés, LCP amélioré</td>
+                <td><span class="impact-badge impact-high">⭐⭐⭐</span></td>
+            </tr>
+            <tr onclick="location.href='#rule3'" style="cursor: pointer;">
+                <td>3</td>
+                <td><strong>import_selectif</strong></td>
+                <td>Réduire le poids du bundle</td>
+                <td>Import ciblé (ex: lodash/debounce)</td>
+                <td>-50 à -500 KB, parsing 2× plus rapide</td>
+                <td><span class="impact-badge impact-high">⭐⭐⭐</span></td>
+            </tr>
+            <tr onclick="location.href='#rule4'" style="cursor: pointer;">
+                <td>4</td>
+                <td><strong>code_splitting</strong></td>
+                <td>Réduire le JS critique initial</td>
+                <td>Split par routes/pages</td>
+                <td>FCP plus rapide, CPU réduit au démarrage</td>
+                <td><span class="impact-badge impact-medium">⭐⭐</span></td>
+            </tr>
+            <tr onclick="location.href='#rule5'" style="cursor: pointer;">
+                <td>5</td>
+                <td><strong>rAF_vs_interval</strong></td>
+                <td>Limiter les frames gaspillées</td>
+                <td>Utiliser requestAnimationFrame()</td>
+                <td>-20 à -60% rendu inutile, fluidité accrue</td>
+                <td><span class="impact-badge impact-medium">⭐⭐</span></td>
+            </tr>
+            <tr onclick="location.href='#rule6'" style="cursor: pointer;">
+                <td>6</td>
+                <td><strong>nettoyage_refs</strong></td>
+                <td>Réduire les fuites mémoire</td>
+                <td>Supprimer listeners et timers orphelins</td>
+                <td>-10 à -30% mémoire persistante</td>
+                <td><span class="impact-badge impact-medium">⭐⭐</span></td>
+            </tr>
+            <tr onclick="location.href='#rule7'" style="cursor: pointer;">
+                <td>7</td>
+                <td><strong>eviter_json_lourd</strong></td>
+                <td>Limiter les données transférées</td>
+                <td>Envoyer JSON léger et pertinent</td>
+                <td>-30 à -90% taille JSON, parsing plus rapide</td>
+                <td><span class="impact-badge impact-low">⭐</span></td>
+            </tr>
+            <tr onclick="location.href='#rule8'" style="cursor: pointer;">
+                <td>8</td>
+                <td><strong>batched_requests</strong></td>
+                <td>Réduire les requêtes inutiles</td>
+                <td>Batcher ou différer les appels API</td>
+                <td>-20 à -70% de requêtes, moins de wake-up radio</td>
+                <td><span class="impact-badge impact-medium">⭐⭐</span></td>
+            </tr>
+            <tr onclick="location.href='#rule9'" style="cursor: pointer;">
+                <td>9</td>
+                <td><strong>framework_legers</strong></td>
+                <td>Réduire la charge JS côté client</td>
+                <td>Utiliser Preact, Svelte ou Vanilla JS</td>
+                <td>-200 à -800 KB, -30% CPU</td>
+                <td><span class="impact-badge impact-high">⭐⭐⭐</span></td>
+            </tr>
+            <tr onclick="location.href='#rule10'" style="cursor: pointer;">
+                <td>10</td>
+                <td><strong>memoisation_pure</strong></td>
+                <td>Éviter les recalculs redondants</td>
+                <td>Utiliser useMemo, cache Map/WeakMap</td>
+                <td>UI ×2 à ×5 plus réactive</td>
+                <td><span class="impact-badge impact-medium">⭐⭐</span></td>
+            </tr>
+            </tbody>
+        </table>
         </section>
+
+
 
         <!-- Zone des éco-règles JS (contenu sera ajouté plus tard) -->
         <section id="js-eco-rules">
