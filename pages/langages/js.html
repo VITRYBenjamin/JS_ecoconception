@@ -15,6 +15,181 @@
     <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../assets/styles/styles.css">
     <link rel="stylesheet" href="../../assets/styles/print.css" media="print">
+    <style>
+        /* Styles spécifiques pour les code blocks */
+        .code-block {
+            background-color: #2d2d2d;
+            border-left: 4px solid var(--primary-color);
+            padding: 15px 20px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .code-block.bad {
+            border-left-color: var(--emergency-color);
+            background-color: rgba(253, 99, 99, 0.1);
+        }
+
+        .code-block.good {
+            border-left-color: var(--success-color);
+            background-color: rgba(105, 240, 109, 0.1);
+        }
+
+        .code-block pre {
+            margin: 0;
+            color: #e8e8e8;
+        }
+
+        .code-block code {
+            color: #e8e8e8;
+        }
+
+        .keyword { color: #569cd6; }
+        .string { color: #ce9178; }
+        .function { color: #dcdcaa; }
+        .variable { color: #9cdcfe; }
+        .comment { color: #6a9955; font-style: italic; }
+        .operator { color: #d4d4d4; }
+
+        .eco-rule {
+            margin: 40px 0;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(47, 223, 173, 0.05) 0%, rgba(47, 223, 173, 0.01) 100%);
+            border-radius: 10px;
+            border: 1px solid rgba(47, 223, 173, 0.3);
+        }
+
+        .eco-rule h3 {
+            color: var(--primary-color);
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .eco-rule .rule-number {
+            background-color: var(--primary-color);
+            color: var(--background-color);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .impact-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin: 5px;
+        }
+
+        .impact-high {
+            background-color: var(--success-color);
+            color: var(--background-color);
+        }
+
+        .impact-medium {
+            background-color: var(--warning-color);
+            color: var(--background-color);
+        }
+
+        .impact-low {
+            background-color: var(--info-color);
+            color: white;
+        }
+
+        .explanation-box {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 3px solid var(--info-color);
+        }
+
+        .gain-box {
+            background-color: rgba(105, 240, 109, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 3px solid var(--success-color);
+        }
+
+        .nav-languages {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-languages a {
+            padding: 10px 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .nav-languages a:hover {
+            background-color: rgba(47, 223, 173, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .nav-languages a.active {
+            background-color: #777bb4;
+            color: white;
+            border-color: #777bb4;
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .summary-table th,
+        .summary-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .summary-table th {
+            background-color: rgba(47, 223, 173, 0.2);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .summary-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .eco-rule h3 {
+                font-size: 1.3rem;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
     <script defer src="../../assets/scripts/scripts-tp.js"></script>
 </head>
 
