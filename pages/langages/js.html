@@ -199,6 +199,53 @@
             background-color: rgba(255, 255, 255, 0.05);
         }
 
+        /* Styles pour la grille des pratiques complémentaires */
+        .practices-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            width: 100%;
+        }
+
+        .practice-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            min-width: 0; /* Important pour permettre le shrink */
+        }
+
+        .practice-card h3 {
+            margin-bottom: 15px;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+
+        .practice-card .code-block {
+            font-size: 0.75rem;
+            margin: 10px 0;
+            overflow-x: auto;
+            max-width: 100%;
+        }
+
+        .practice-card .code-block pre {
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .practice-card p {
+            font-size: 0.9rem;
+            color: var(--text-color-light);
+            margin-top: 10px;
+        }
+
+        @media (max-width: 1200px) {
+            .practices-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         @media (max-width: 768px) {
             .eco-rule h3 {
                 font-size: 1.3rem;
@@ -206,6 +253,14 @@
 
             .code-block {
                 font-size: 0.8rem;
+            }
+
+            .practices-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .practice-card .code-block {
+                font-size: 0.7rem;
             }
         }
     </style>
@@ -379,209 +434,458 @@
             </table>
         </section>
 
-        
-        <section style="margin-top: 50px;">
-        <h2>Récapitulatif des 5 éco-règles JavaScript</h2>
-        <p>Cliquez sur une règle pour accéder directement aux détails et exemples de code.</p>
-
-        <table class="summary-table">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Règle</th>
-                <th>But</th>
-                <th>Bonne pratique</th>
-                <th>Impact</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr onclick="location.href='#rule1'" style="cursor: pointer;">
-                <td>1</td>
-                <td><strong>throttle_events</strong></td>
-                <td>Réduire CPU/batterie sur scroll & resize</td>
-                <td>Throttle + <code>passive: true</code></td>
-                <td><span class="impact-badge impact-high">⭐⭐⭐</span></td>
-            </tr>
-            <tr onclick="location.href='#rule2'" style="cursor: pointer;">
-                <td>2</td>
-                <td><strong>lazy_load_js</strong></td>
-                <td>Réduire le JS chargé au démarrage</td>
-                <td>Import dynamique</td>
-                <td><span class="impact-badge impact-high">⭐⭐⭐</span></td>
-            </tr>
-            <tr onclick="location.href='#rule3'" style="cursor: pointer;">
-                <td>3</td>
-                <td><strong>nettoyage_refs</strong></td>
-                <td>Éviter les fuites mémoire</td>
-                <td>Cleanup listeners + timers</td>
-                <td><span class="impact-badge impact-medium">⭐⭐</span></td>
-            </tr>
-            <tr onclick="location.href='#rule4'" style="cursor: pointer;">
-                <td>4</td>
-                <td><strong>rAF_vs_interval</strong></td>
-                <td>Éviter les frames inutiles</td>
-                <td><code>requestAnimationFrame()</code></td>
-                <td><span class="impact-badge impact-medium">⭐⭐</span></td>
-            </tr>
-            <tr onclick="location.href='#rule5'" style="cursor: pointer;">
-                <td>5</td>
-                <td><strong>batched_requests</strong></td>
-                <td>Réduire les appels réseau</td>
-                <td>Batch / debounce API</td>
-                <td><span class="impact-badge impact-medium">⭐⭐</span></td>
-            </tr>
-            </tbody>
-        </table>
-        </section>
-
-
 
         <section style="margin-top: 60px;">
         <h2 style="text-align: center; font-size: 2rem; color: var(--primary-color); margin: 50px 0 30px;">
-            <i class="fas fa-leaf"></i> Bonnes pratiques complémentaires (5)
+            <i class="fas fa-leaf"></i> Les 10 Règles d'Éco-conception JavaScript
         </h2>
 
-        <!-- BP 1 -->
-        <div class="eco-rule" id="bp1">
-            <h3><span class="rule-number">1</span> Réduire les reflows : regrouper les modifications DOM</h3>
+        <!-- Règle 1 : throttle_events -->
+        <div class="eco-rule" id="rule1">
+            <h3><span class="rule-number">1</span> Throttle & Debounce des événements fréquents</h3>
+            <span class="impact-badge impact-high">Impact ⭐⭐⭐</span>
             <p style="margin-top: 10px; color: var(--text-color-light);">
-            Modifier le DOM en boucle déclenche des recalculs de layout coûteux ; regrouper les changements réduit le travail du navigateur.
+            Les événements comme <code>scroll</code>, <code>resize</code>, ou <code>input</code> peuvent se déclencher des centaines de fois par seconde. 
+            Utiliser <code>throttle()</code> ou <code>debounce()</code> réduit drastiquement l'utilisation CPU et prolonge la batterie.
             </p>
+
+            <div class="gain-box">
+                <strong>Gain estimé :</strong> CPU -30 à -90%, autonomie +20% sur mobile
+            </div>
 
             <h4 style="color: var(--emergency-color); margin-top: 18px;"><i class="fas fa-times-circle"></i> Mauvais :</h4>
             <div class="code-block bad">
-        <pre><code><span class="keyword">for</span> <span class="operator">(</span><span class="keyword">let</span> <span class="variable">i</span> <span class="operator">=</span> <span class="string">0</span><span class="operator">;</span> <span class="variable">i</span> <span class="operator">&lt;</span> <span class="variable">items</span><span class="operator">.</span><span class="variable">length</span><span class="operator">;</span> <span class="variable">i</span><span class="operator">++</span><span class="operator">)</span> <span class="operator">{</span>
-        <span class="keyword">const</span> <span class="variable">li</span> <span class="operator">=</span> <span class="variable">document</span><span class="operator">.</span><span class="function">createElement</span><span class="operator">(</span><span class="string">'li'</span><span class="operator">);</span>
-        <span class="variable">li</span><span class="operator">.</span><span class="variable">textContent</span> <span class="operator">=</span> <span class="variable">items</span><span class="operator">[</span><span class="variable">i</span><span class="operator">]</span><span class="operator">;</span>
-        <span class="variable">list</span><span class="operator">.</span><span class="function">appendChild</span><span class="operator">(</span><span class="variable">li</span><span class="operator">);</span> <span class="comment">// layout potentiel à répétition</span>
-        <span class="operator">}</span></code></pre>
-            </div>
-
-            <h4 style="color: var(--success-color); margin-top: 18px;"><i class="fas fa-check-circle"></i> Bon :</h4>
-            <div class="code-block good">
-        <pre><code><span class="keyword">const</span> <span class="variable">frag</span> <span class="operator">=</span> <span class="variable">document</span><span class="operator">.</span><span class="function">createDocumentFragment</span><span class="operator">();</span>
-
-        <span class="keyword">for</span> <span class="operator">(</span><span class="keyword">let</span> <span class="variable">i</span> <span class="operator">=</span> <span class="string">0</span><span class="operator">;</span> <span class="variable">i</span> <span class="operator">&lt;</span> <span class="variable">items</span><span class="operator">.</span><span class="variable">length</span><span class="operator">;</span> <span class="variable">i</span><span class="operator">++</span><span class="operator">)</span> <span class="operator">{</span>
-        <span class="keyword">const</span> <span class="variable">li</span> <span class="operator">=</span> <span class="variable">document</span><span class="operator">.</span><span class="function">createElement</span><span class="operator">(</span><span class="string">'li'</span><span class="operator">);</span>
-        <span class="variable">li</span><span class="operator">.</span><span class="variable">textContent</span> <span class="operator">=</span> <span class="variable">items</span><span class="operator">[</span><span class="variable">i</span><span class="operator">]</span><span class="operator">;</span>
-        <span class="variable">frag</span><span class="operator">.</span><span class="function">appendChild</span><span class="operator">(</span><span class="variable">li</span><span class="operator">);</span>
-        <span class="operator">}</span>
-
-        <span class="variable">list</span><span class="operator">.</span><span class="function">appendChild</span><span class="operator">(</span><span class="variable">frag</span><span class="operator">);</span> <span class="comment">// 1 insertion, 1 recalcul</span></code></pre>
-            </div>
-        </div>
-
-        <!-- BP 2 -->
-        <div class="eco-rule" id="bp2">
-            <h3><span class="rule-number">2</span> Préférer la délégation d’événements</h3>
-            <p style="margin-top: 10px; color: var(--text-color-light);">
-            Ajouter un listener par élément coûte en mémoire ; un seul listener sur le parent suffit dans la plupart des listes dynamiques.
-            </p>
-
-            <h4 style="color: var(--emergency-color); margin-top: 18px;"><i class="fas fa-times-circle"></i> Mauvais :</h4>
-            <div class="code-block bad">
-        <pre><code><span class="variable">buttons</span><span class="operator">.</span><span class="function">forEach</span><span class="operator">(</span><span class="operator">(</span><span class="variable">btn</span><span class="operator">)</span> <span class="operator">=&gt;</span> <span class="operator">{</span>
-        <span class="variable">btn</span><span class="operator">.</span><span class="function">addEventListener</span><span class="operator">(</span><span class="string">'click'</span><span class="operator">,</span> <span class="function">handleClick</span><span class="operator">);</span>
+        <pre><code><span class="variable">window</span><span class="operator">.</span><span class="function">addEventListener</span><span class="operator">(</span><span class="string">'scroll'</span><span class="operator">,</span> <span class="operator">()</span> <span class="operator">=&gt;</span> <span class="operator">{</span>
+        <span class="comment">// Exécuté 100+ fois par seconde</span>
+        <span class="function">updateProgressBar</span><span class="operator">();</span>
         <span class="operator">});</span></code></pre>
             </div>
 
             <h4 style="color: var(--success-color); margin-top: 18px;"><i class="fas fa-check-circle"></i> Bon :</h4>
             <div class="code-block good">
-        <pre><code><span class="variable">container</span><span class="operator">.</span><span class="function">addEventListener</span><span class="operator">(</span><span class="string">'click'</span><span class="operator">,</span> <span class="operator">(</span><span class="variable">e</span><span class="operator">)</span> <span class="operator">=&gt;</span> <span class="operator">{</span>
-        <span class="keyword">const</span> <span class="variable">btn</span> <span class="operator">=</span> <span class="variable">e</span><span class="operator">.</span><span class="variable">target</span><span class="operator">.</span><span class="function">closest</span><span class="operator">(</span><span class="string">'button[data-action]'</span><span class="operator">);</span>
-        <span class="keyword">if</span> <span class="operator">(!</span><span class="variable">btn</span><span class="operator">)</span> <span class="keyword">return</span><span class="operator">;</span>
-        <span class="function">handleClick</span><span class="operator">(</span><span class="variable">btn</span><span class="operator">.</span><span class="dataset">dataset</span><span class="operator">.</span><span class="variable">action</span><span class="operator">);</span>
+        <pre><code><span class="keyword">function</span> <span class="function">throttle</span><span class="operator">(</span><span class="variable">fn</span><span class="operator">,</span> <span class="variable">delay</span><span class="operator">)</span> <span class="operator">{</span>
+        <span class="keyword">let</span> <span class="variable">last</span> <span class="operator">=</span> <span class="string">0</span><span class="operator">;</span>
+        <span class="keyword">return</span> <span class="operator">(</span><span class="operator">...</span><span class="variable">args</span><span class="operator">)</span> <span class="operator">=&gt;</span> <span class="operator">{</span>
+            <span class="keyword">const</span> <span class="variable">now</span> <span class="operator">=</span> <span class="function">Date</span><span class="operator">.</span><span class="function">now</span><span class="operator">();</span>
+            <span class="keyword">if</span> <span class="operator">(</span><span class="variable">now</span> <span class="operator">-</span> <span class="variable">last</span> <span class="operator">&gt;=</span> <span class="variable">delay</span><span class="operator">)</span> <span class="operator">{</span>
+                <span class="variable">last</span> <span class="operator">=</span> <span class="variable">now</span><span class="operator">;</span>
+                <span class="variable">fn</span><span class="operator">(</span><span class="operator">...</span><span class="variable">args</span><span class="operator">);</span>
+            <span class="operator">}</span>
+        <span class="operator">}</span><span class="operator">;</span>
+        <span class="operator">}</span>
+
+        <span class="variable">window</span><span class="operator">.</span><span class="function">addEventListener</span><span class="operator">(</span><span class="string">'scroll'</span><span class="operator">,</span> <span class="function">throttle</span><span class="operator">(</span><span class="function">updateProgressBar</span><span class="operator">,</span> <span class="string">200</span><span class="operator">)</span><span class="operator">,</span> <span class="operator">{</span> <span class="variable">passive</span><span class="operator">:</span> <span class="keyword">true</span> <span class="operator">}</span><span class="operator">);</span></code></pre>
+            </div>
+        </div>
+
+        <!-- Règle 2 : lazy_load_js -->
+        <div class="eco-rule" id="rule2">
+            <h3><span class="rule-number">2</span> Lazy Loading des modules JavaScript</h3>
+            <span class="impact-badge impact-high">Impact ⭐⭐⭐</span>
+            <p style="margin-top: 10px; color: var(--text-color-light);">
+            Charger uniquement le code nécessaire au démarrage et différer le reste améliore considérablement le temps de chargement initial.
+            </p>
+
+            <div class="gain-box">
+                <strong>Gain estimé :</strong> -200 à -800 KB transférés, LCP amélioré de 30-50%
+            </div>
+
+            <h4 style="color: var(--emergency-color); margin-top: 18px;"><i class="fas fa-times-circle"></i> Mauvais :</h4>
+            <div class="code-block bad">
+        <pre><code><span class="keyword">import</span> <span class="variable">Chart</span> <span class="keyword">from</span> <span class="string">'chart.js'</span><span class="operator">;</span>
+        <span class="keyword">import</span> <span class="variable">Analytics</span> <span class="keyword">from</span> <span class="string">'./analytics'</span><span class="operator">;</span>
+        <span class="keyword">import</span> <span class="variable">HeavyEditor</span> <span class="keyword">from</span> <span class="string">'./editor'</span><span class="operator">;</span>
+
+        <span class="comment">// Tout est chargé dès le début</span></code></pre>
+            </div>
+
+            <h4 style="color: var(--success-color); margin-top: 18px;"><i class="fas fa-check-circle"></i> Bon :</h4>
+            <div class="code-block good">
+        <pre><code><span class="comment">// Chargement à la demande</span>
+        <span class="keyword">async</span> <span class="keyword">function</span> <span class="function">showChart</span><span class="operator">(</span><span class="variable">data</span><span class="operator">)</span> <span class="operator">{</span>
+        <span class="keyword">const</span> <span class="operator">{</span> <span class="keyword">default</span><span class="operator">:</span> <span class="variable">Chart</span> <span class="operator">}</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="keyword">import</span><span class="operator">(</span><span class="string">'chart.js'</span><span class="operator">);</span>
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">Chart</span><span class="operator">(</span><span class="variable">data</span><span class="operator">);</span>
+        <span class="operator">}</span>
+
+        <span class="variable">button</span><span class="operator">.</span><span class="function">addEventListener</span><span class="operator">(</span><span class="string">'click'</span><span class="operator">,</span> <span class="keyword">async</span> <span class="operator">()</span> <span class="operator">=&gt;</span> <span class="operator">{</span>
+        <span class="keyword">const</span> <span class="operator">{</span> <span class="keyword">default</span><span class="operator">:</span> <span class="variable">Editor</span> <span class="operator">}</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="keyword">import</span><span class="operator">(</span><span class="string">'./editor'</span><span class="operator">);</span>
+        <span class="keyword">new</span> <span class="function">Editor</span><span class="operator">();</span>
         <span class="operator">});</span></code></pre>
             </div>
         </div>
 
-        <!-- BP 3 -->
-        <div class="eco-rule" id="bp3">
-            <h3><span class="rule-number">3</span> Mettre en cache les sélecteurs DOM</h3>
+        <!-- Règle 3 : import_selectif -->
+        <div class="eco-rule" id="rule3">
+            <h3><span class="rule-number">3</span> Import sélectif depuis les bibliothèques</h3>
+            <span class="impact-badge impact-high">Impact ⭐⭐⭐</span>
             <p style="margin-top: 10px; color: var(--text-color-light);">
-            Refaire <code>querySelector</code> à répétition est inutile ; stocker la référence évite du travail au navigateur.
+            Importer uniquement les fonctions nécessaires plutôt que la bibliothèque entière réduit drastiquement le poids du bundle.
             </p>
+
+            <div class="gain-box">
+                <strong>Gain estimé :</strong> -50 à -500 KB, parsing 2× plus rapide
+            </div>
 
             <h4 style="color: var(--emergency-color); margin-top: 18px;"><i class="fas fa-times-circle"></i> Mauvais :</h4>
             <div class="code-block bad">
-        <pre><code><span class="keyword">function</span> <span class="function">update</span><span class="operator">(</span><span class="variable">text</span><span class="operator">)</span> <span class="operator">{</span>
-        <span class="variable">document</span><span class="operator">.</span><span class="function">querySelector</span><span class="operator">(</span><span class="string">'#status'</span><span class="operator">)</span><span class="operator">.</span><span class="variable">textContent</span> <span class="operator">=</span> <span class="variable">text</span><span class="operator">;</span>
-        <span class="operator">}</span></code></pre>
+        <pre><code><span class="keyword">import</span> <span class="variable">_</span> <span class="keyword">from</span> <span class="string">'lodash'</span><span class="operator">;</span>
+
+        <span class="keyword">const</span> <span class="variable">result</span> <span class="operator">=</span> <span class="variable">_</span><span class="operator">.</span><span class="function">debounce</span><span class="operator">(</span><span class="function">fn</span><span class="operator">,</span> <span class="string">300</span><span class="operator">);</span>
+        <span class="comment">// Charge 70KB pour une seule fonction !</span></code></pre>
             </div>
 
             <h4 style="color: var(--success-color); margin-top: 18px;"><i class="fas fa-check-circle"></i> Bon :</h4>
             <div class="code-block good">
-        <pre><code><span class="keyword">const</span> <span class="variable">statusEl</span> <span class="operator">=</span> <span class="variable">document</span><span class="operator">.</span><span class="function">querySelector</span><span class="operator">(</span><span class="string">'#status'</span><span class="operator">);</span>
+        <pre><code><span class="keyword">import</span> <span class="variable">debounce</span> <span class="keyword">from</span> <span class="string">'lodash/debounce'</span><span class="operator">;</span>
 
-        <span class="keyword">function</span> <span class="function">update</span><span class="operator">(</span><span class="variable">text</span><span class="operator">)</span> <span class="operator">{</span>
-        <span class="variable">statusEl</span><span class="operator">.</span><span class="variable">textContent</span> <span class="operator">=</span> <span class="variable">text</span><span class="operator">;</span>
+        <span class="keyword">const</span> <span class="variable">result</span> <span class="operator">=</span> <span class="function">debounce</span><span class="operator">(</span><span class="function">fn</span><span class="operator">,</span> <span class="string">300</span><span class="operator">);</span>
+        <span class="comment">// Seulement 2KB chargés</span></code></pre>
+            </div>
+        </div>
+
+        <!-- Règle 4 : code_splitting -->
+        <div class="eco-rule" id="rule4">
+            <h3><span class="rule-number">4</span> Code Splitting par routes/pages</h3>
+            <span class="impact-badge impact-medium">Impact ⭐⭐</span>
+            <p style="margin-top: 10px; color: var(--text-color-light);">
+            Diviser le code en chunks par route permet de ne charger que le JavaScript nécessaire pour la page actuelle.
+            </p>
+
+            <div class="gain-box">
+                <strong>Gain estimé :</strong> FCP plus rapide, CPU réduit au démarrage
+            </div>
+
+            <h4 style="color: var(--emergency-color); margin-top: 18px;"><i class="fas fa-times-circle"></i> Mauvais :</h4>
+            <div class="code-block bad">
+        <pre><code><span class="keyword">import</span> <span class="variable">HomePage</span> <span class="keyword">from</span> <span class="string">'./pages/Home'</span><span class="operator">;</span>
+        <span class="keyword">import</span> <span class="variable">AboutPage</span> <span class="keyword">from</span> <span class="string">'./pages/About'</span><span class="operator">;</span>
+        <span class="keyword">import</span> <span class="variable">DashboardPage</span> <span class="keyword">from</span> <span class="string">'./pages/Dashboard'</span><span class="operator">;</span>
+
+        <span class="comment">// Toutes les pages sont dans le bundle initial</span></code></pre>
+            </div>
+
+            <h4 style="color: var(--success-color); margin-top: 18px;"><i class="fas fa-check-circle"></i> Bon (React) :</h4>
+            <div class="code-block good">
+        <pre><code><span class="keyword">import</span> <span class="operator">{</span> <span class="variable">lazy</span><span class="operator">,</span> <span class="variable">Suspense</span> <span class="operator">}</span> <span class="keyword">from</span> <span class="string">'react'</span><span class="operator">;</span>
+
+        <span class="keyword">const</span> <span class="variable">HomePage</span> <span class="operator">=</span> <span class="function">lazy</span><span class="operator">(() =&gt;</span> <span class="keyword">import</span><span class="operator">(</span><span class="string">'./pages/Home'</span><span class="operator">));</span>
+        <span class="keyword">const</span> <span class="variable">AboutPage</span> <span class="operator">=</span> <span class="function">lazy</span><span class="operator">(() =&gt;</span> <span class="keyword">import</span><span class="operator">(</span><span class="string">'./pages/About'</span><span class="operator">));</span>
+        <span class="keyword">const</span> <span class="variable">DashboardPage</span> <span class="operator">=</span> <span class="function">lazy</span><span class="operator">(() =&gt;</span> <span class="keyword">import</span><span class="operator">(</span><span class="string">'./pages/Dashboard'</span><span class="operator">));</span>
+
+        <span class="keyword">function</span> <span class="function">App</span><span class="operator">()</span> <span class="operator">{</span>
+        <span class="keyword">return</span> <span class="operator">&lt;</span><span class="variable">Suspense</span> <span class="variable">fallback</span><span class="operator">=</span><span class="operator">{&lt;</span><span class="variable">Loading</span> <span class="operator">/&gt;}&gt;</span>
+            <span class="operator">{/* Chaque page se charge à la demande */}</span>
+        <span class="operator">&lt;/</span><span class="variable">Suspense</span><span class="operator">&gt;;</span>
         <span class="operator">}</span></code></pre>
             </div>
         </div>
 
-        <!-- BP 4 (inspiré mémoire leaks) -->
-        <div class="eco-rule" id="bp4">
-            <h3><span class="rule-number">4</span> Utiliser WeakMap / WeakSet pour les caches liés au DOM</h3>
+        <!-- Règle 5 : rAF_vs_interval -->
+        <div class="eco-rule" id="rule5">
+            <h3><span class="rule-number">5</span> requestAnimationFrame au lieu de setInterval</h3>
+            <span class="impact-badge impact-medium">Impact ⭐⭐</span>
             <p style="margin-top: 10px; color: var(--text-color-light);">
-            Un cache classique peut empêcher le GC de libérer des éléments supprimés ; WeakMap évite de retenir des objets “morts”.
+            Pour les animations, <code>requestAnimationFrame()</code> synchronise avec le rafraîchissement de l'écran et s'arrête quand l'onglet est inactif.
             </p>
+
+            <div class="gain-box">
+                <strong>Gain estimé :</strong> -20 à -60% rendu inutile, fluidité accrue
+            </div>
 
             <h4 style="color: var(--emergency-color); margin-top: 18px;"><i class="fas fa-times-circle"></i> Mauvais :</h4>
             <div class="code-block bad">
-        <pre><code><span class="keyword">const</span> <span class="variable">cache</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Map</span><span class="operator">();</span>
-
-        <span class="keyword">function</span> <span class="function">getMeta</span><span class="operator">(</span><span class="variable">node</span><span class="operator">)</span> <span class="operator">{</span>
-        <span class="keyword">if</span> <span class="operator">(!</span><span class="variable">cache</span><span class="operator">.</span><span class="function">has</span><span class="operator">(</span><span class="variable">node</span><span class="operator">))</span> <span class="operator">{</span>
-            <span class="variable">cache</span><span class="operator">.</span><span class="function">set</span><span class="operator">(</span><span class="variable">node</span><span class="operator">,</span> <span class="operator">{</span> <span class="variable">created</span><span class="operator">:</span> <span class="function">Date</span><span class="operator">.</span><span class="function">now</span><span class="operator">()</span> <span class="operator">}</span><span class="operator">);</span>
-        <span class="operator">}</span>
-        <span class="keyword">return</span> <span class="variable">cache</span><span class="operator">.</span><span class="function">get</span><span class="operator">(</span><span class="variable">node</span><span class="operator">);</span>
-        <span class="operator">}</span></code></pre>
+        <pre><code><span class="function">setInterval</span><span class="operator">(() =&gt;</span> <span class="operator">{</span>
+        <span class="variable">box</span><span class="operator">.</span><span class="variable">style</span><span class="operator">.</span><span class="variable">left</span> <span class="operator">=</span> <span class="variable">position</span><span class="operator">++</span> <span class="operator">+</span> <span class="string">'px'</span><span class="operator">;</span>
+        <span class="operator">}</span><span class="operator">,</span> <span class="string">16</span><span class="operator">);</span>
+        <span class="comment">// Continue même si l'onglet est caché</span></code></pre>
             </div>
 
             <h4 style="color: var(--success-color); margin-top: 18px;"><i class="fas fa-check-circle"></i> Bon :</h4>
             <div class="code-block good">
-        <pre><code><span class="keyword">const</span> <span class="variable">cache</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">WeakMap</span><span class="operator">();</span>
-
-        <span class="keyword">function</span> <span class="function">getMeta</span><span class="operator">(</span><span class="variable">node</span><span class="operator">)</span> <span class="operator">{</span>
-        <span class="keyword">if</span> <span class="operator">(!</span><span class="variable">cache</span><span class="operator">.</span><span class="function">has</span><span class="operator">(</span><span class="variable">node</span><span class="operator">))</span> <span class="operator">{</span>
-            <span class="variable">cache</span><span class="operator">.</span><span class="function">set</span><span class="operator">(</span><span class="variable">node</span><span class="operator">,</span> <span class="operator">{</span> <span class="variable">created</span><span class="operator">:</span> <span class="function">Date</span><span class="operator">.</span><span class="function">now</span><span class="operator">()</span> <span class="operator">}</span><span class="operator">);</span>
+        <pre><code><span class="keyword">function</span> <span class="function">animate</span><span class="operator">()</span> <span class="operator">{</span>
+        <span class="variable">box</span><span class="operator">.</span><span class="variable">style</span><span class="operator">.</span><span class="variable">left</span> <span class="operator">=</span> <span class="variable">position</span><span class="operator">++</span> <span class="operator">+</span> <span class="string">'px'</span><span class="operator">;</span>
+        <span class="function">requestAnimationFrame</span><span class="operator">(</span><span class="function">animate</span><span class="operator">);</span>
         <span class="operator">}</span>
-        <span class="keyword">return</span> <span class="variable">cache</span><span class="operator">.</span><span class="function">get</span><span class="operator">(</span><span class="variable">node</span><span class="operator">);</span>
-        <span class="operator">}</span></code></pre>
+
+        <span class="function">requestAnimationFrame</span><span class="operator">(</span><span class="function">animate</span><span class="operator">);</span>
+        <span class="comment">// S'arrête automatiquement quand l'onglet est inactif</span></code></pre>
             </div>
         </div>
 
-        <!-- BP 5 -->
-        <div class="eco-rule" id="bp5">
-            <h3><span class="rule-number">5</span> Annuler les fetch inutiles avec AbortController</h3>
+        <!-- Règle 6 : nettoyage_refs -->
+        <div class="eco-rule" id="rule6">
+            <h3><span class="rule-number">6</span> Nettoyage des listeners et timers</h3>
+            <span class="impact-badge impact-medium">Impact ⭐⭐</span>
             <p style="margin-top: 10px; color: var(--text-color-light);">
-            Quand une requête devient obsolète (ex: recherche), l’annuler évite du réseau et des traitements côté client/serveur.
+            Les event listeners, timers et observateurs non supprimés créent des fuites mémoire. Toujours les nettoyer lors du démontage.
             </p>
+
+            <div class="gain-box">
+                <strong>Gain estimé :</strong> -10 à -30% mémoire persistante, prévention des fuites
+            </div>
 
             <h4 style="color: var(--emergency-color); margin-top: 18px;"><i class="fas fa-times-circle"></i> Mauvais :</h4>
             <div class="code-block bad">
-        <pre><code><span class="keyword">async</span> <span class="keyword">function</span> <span class="function">search</span><span class="operator">(</span><span class="variable">q</span><span class="operator">)</span> <span class="operator">{</span>
-        <span class="keyword">const</span> <span class="variable">res</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="operator">(</span><span class="string">`/search?q=${q}`</span><span class="operator">);</span>
-        <span class="keyword">return</span> <span class="variable">res</span><span class="operator">.</span><span class="function">json</span><span class="operator">();</span> <span class="comment">// anciennes réponses peuvent arriver après</span>
+        <pre><code><span class="keyword">function</span> <span class="function">setupWidget</span><span class="operator">()</span> <span class="operator">{</span>
+        <span class="variable">window</span><span class="operator">.</span><span class="function">addEventListener</span><span class="operator">(</span><span class="string">'resize'</span><span class="operator">,</span> <span class="function">handleResize</span><span class="operator">);</span>
+        <span class="function">setInterval</span><span class="operator">(</span><span class="function">updateStatus</span><span class="operator">,</span> <span class="string">5000</span><span class="operator">);</span>
+        <span class="comment">// Jamais nettoyé !</span>
         <span class="operator">}</span></code></pre>
             </div>
 
             <h4 style="color: var(--success-color); margin-top: 18px;"><i class="fas fa-check-circle"></i> Bon :</h4>
             <div class="code-block good">
-        <pre><code><span class="keyword">let</span> <span class="variable">ctrl</span><span class="operator">;</span>
+        <pre><code><span class="keyword">function</span> <span class="function">setupWidget</span><span class="operator">()</span> <span class="operator">{</span>
+        <span class="variable">window</span><span class="operator">.</span><span class="function">addEventListener</span><span class="operator">(</span><span class="string">'resize'</span><span class="operator">,</span> <span class="function">handleResize</span><span class="operator">);</span>
+        <span class="keyword">const</span> <span class="variable">interval</span> <span class="operator">=</span> <span class="function">setInterval</span><span class="operator">(</span><span class="function">updateStatus</span><span class="operator">,</span> <span class="string">5000</span><span class="operator">);</span>
 
-        <span class="keyword">async</span> <span class="keyword">function</span> <span class="function">search</span><span class="operator">(</span><span class="variable">q</span><span class="operator">)</span> <span class="operator">{</span>
-        <span class="keyword">if</span> <span class="operator">(</span><span class="variable">ctrl</span><span class="operator">)</span> <span class="variable">ctrl</span><span class="operator">.</span><span class="function">abort</span><span class="operator">();</span>
-        <span class="variable">ctrl</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">AbortController</span><span class="operator">();</span>
+        <span class="keyword">return</span> <span class="operator">()</span> <span class="operator">=&gt;</span> <span class="operator">{</span>
+            <span class="variable">window</span><span class="operator">.</span><span class="function">removeEventListener</span><span class="operator">(</span><span class="string">'resize'</span><span class="operator">,</span> <span class="function">handleResize</span><span class="operator">);</span>
+            <span class="function">clearInterval</span><span class="operator">(</span><span class="variable">interval</span><span class="operator">);</span>
+        <span class="operator">}</span><span class="operator">;</span>
+        <span class="operator">}</span>
 
-        <span class="keyword">const</span> <span class="variable">res</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="operator">(</span><span class="string">`/search?q=${q}`</span><span class="operator">,</span> <span class="operator">{</span> <span class="variable">signal</span><span class="operator">:</span> <span class="variable">ctrl</span><span class="operator">.</span><span class="variable">signal</span> <span class="operator">}</span><span class="operator">);</span>
-        <span class="keyword">return</span> <span class="variable">res</span><span class="operator">.</span><span class="function">json</span><span class="operator">();</span>
+        <span class="keyword">const</span> <span class="variable">cleanup</span> <span class="operator">=</span> <span class="function">setupWidget</span><span class="operator">();</span>
+        <span class="comment">// Plus tard : cleanup();</span></code></pre>
+            </div>
+        </div>
+
+        <!-- Règle 7 : eviter_json_lourd -->
+        <div class="eco-rule" id="rule7">
+            <h3><span class="rule-number">7</span> Envoyer uniquement les données nécessaires</h3>
+            <span class="impact-badge impact-low">Impact ⭐</span>
+            <p style="margin-top: 10px; color: var(--text-color-light);">
+            Éviter de transférer des objets JSON avec des champs inutiles. Filtrer côté serveur ou supprimer les propriétés superflues.
+            </p>
+
+            <div class="gain-box">
+                <strong>Gain estimé :</strong> -30 à -90% taille JSON, parsing plus rapide
+            </div>
+
+            <h4 style="color: var(--emergency-color); margin-top: 18px;"><i class="fas fa-times-circle"></i> Mauvais :</h4>
+            <div class="code-block bad">
+        <pre><code><span class="comment">// API renvoie tout l'objet user avec 50 champs</span>
+        <span class="keyword">const</span> <span class="variable">res</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="operator">(</span><span class="string">'/api/users'</span><span class="operator">);</span>
+        <span class="keyword">const</span> <span class="variable">users</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="variable">res</span><span class="operator">.</span><span class="function">json</span><span class="operator">();</span>
+        <span class="comment">// On utilise seulement id, name, email</span></code></pre>
+            </div>
+
+            <h4 style="color: var(--success-color); margin-top: 18px;"><i class="fas fa-check-circle"></i> Bon :</h4>
+            <div class="code-block good">
+        <pre><code><span class="comment">// API ne renvoie que les champs demandés</span>
+        <span class="keyword">const</span> <span class="variable">res</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="operator">(</span><span class="string">'/api/users?fields=id,name,email'</span><span class="operator">);</span>
+        <span class="keyword">const</span> <span class="variable">users</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="variable">res</span><span class="operator">.</span><span class="function">json</span><span class="operator">();</span>
+        <span class="comment">// JSON 80% plus léger</span></code></pre>
+            </div>
+        </div>
+
+        <!-- Règle 8 : batched_requests -->
+        <div class="eco-rule" id="rule8">
+            <h3><span class="rule-number">8</span> Batcher les requêtes API</h3>
+            <span class="impact-badge impact-medium">Impact ⭐⭐</span>
+            <p style="margin-top: 10px; color: var(--text-color-light);">
+            Regrouper plusieurs appels API en une seule requête réduit la latence réseau et économise la batterie (moins de wake-up radio).
+            </p>
+
+            <div class="gain-box">
+                <strong>Gain estimé :</strong> -20 à -70% de requêtes, moins de wake-up radio
+            </div>
+
+            <h4 style="color: var(--emergency-color); margin-top: 18px;"><i class="fas fa-times-circle"></i> Mauvais :</h4>
+            <div class="code-block bad">
+        <pre><code><span class="keyword">for</span> <span class="operator">(</span><span class="keyword">const</span> <span class="variable">id</span> <span class="keyword">of</span> <span class="variable">productIds</span><span class="operator">)</span> <span class="operator">{</span>
+        <span class="keyword">const</span> <span class="variable">res</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="operator">(</span><span class="string">`/api/products/${id}`</span><span class="operator">);</span>
+        <span class="keyword">const</span> <span class="variable">product</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="variable">res</span><span class="operator">.</span><span class="function">json</span><span class="operator">();</span>
+        <span class="comment">// 20 produits = 20 requêtes HTTP</span>
+        <span class="operator">}</span></code></pre>
+            </div>
+
+            <h4 style="color: var(--success-color); margin-top: 18px;"><i class="fas fa-check-circle"></i> Bon :</h4>
+            <div class="code-block good">
+        <pre><code><span class="comment">// Une seule requête batch</span>
+        <span class="keyword">const</span> <span class="variable">ids</span> <span class="operator">=</span> <span class="variable">productIds</span><span class="operator">.</span><span class="function">join</span><span class="operator">(</span><span class="string">','</span><span class="operator">);</span>
+        <span class="keyword">const</span> <span class="variable">res</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="operator">(</span><span class="string">`/api/products?ids=${ids}`</span><span class="operator">);</span>
+        <span class="keyword">const</span> <span class="variable">products</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="variable">res</span><span class="operator">.</span><span class="function">json</span><span class="operator">();</span>
+        <span class="comment">// 20 produits = 1 requête HTTP</span></code></pre>
+            </div>
+        </div>
+
+        <!-- Règle 9 : framework_legers -->
+        <div class="eco-rule" id="rule9">
+            <h3><span class="rule-number">9</span> Utiliser des frameworks légers</h3>
+            <span class="impact-badge impact-high">Impact ⭐⭐⭐</span>
+            <p style="margin-top: 10px; color: var(--text-color-light);">
+            Pour les projets simples, préférer Preact, Svelte, ou Vanilla JS plutôt que React. Pour les projets complexes, optimiser avec SSR/SSG.
+            </p>
+
+            <div class="gain-box">
+                <strong>Gain estimé :</strong> -200 à -800 KB bundle, -30% CPU
+            </div>
+
+            <div class="explanation-box">
+                <strong>Comparaison des tailles :</strong>
+                <ul style="margin: 10px 0 0 20px;">
+                    <li>React + ReactDOM : ~140 KB</li>
+                    <li>Preact : ~4 KB</li>
+                    <li>Svelte : ~2 KB (runtime)</li>
+                    <li>Vanilla JS : 0 KB</li>
+                </ul>
+            </div>
+
+            <h4 style="color: var(--success-color); margin-top: 18px;"><i class="fas fa-check-circle"></i> Exemple Preact :</h4>
+            <div class="code-block good">
+        <pre><code><span class="keyword">import</span> <span class="operator">{</span> <span class="variable">h</span><span class="operator">,</span> <span class="variable">render</span> <span class="operator">}</span> <span class="keyword">from</span> <span class="string">'preact'</span><span class="operator">;</span>
+
+        <span class="keyword">function</span> <span class="function">App</span><span class="operator">()</span> <span class="operator">{</span>
+        <span class="keyword">return</span> <span class="operator">&lt;</span><span class="variable">div</span><span class="operator">&gt;</span><span class="string">Hello Preact!</span><span class="operator">&lt;/</span><span class="variable">div</span><span class="operator">&gt;;</span>
+        <span class="operator">}</span>
+
+        <span class="function">render</span><span class="operator">(&lt;</span><span class="variable">App</span> <span class="operator">/&gt;,</span> <span class="variable">document</span><span class="operator">.</span><span class="variable">body</span><span class="operator">);</span>
+        <span class="comment">// API identique à React, 35× plus léger</span></code></pre>
+            </div>
+        </div>
+
+        <!-- Règle 10 : memoisation_pure -->
+        <div class="eco-rule" id="rule10">
+            <h3><span class="rule-number">10</span> Mémoïsation des calculs coûteux</h3>
+            <span class="impact-badge impact-medium">Impact ⭐⭐</span>
+            <p style="margin-top: 10px; color: var(--text-color-light);">
+            Utiliser <code>useMemo</code> (React) ou un cache manuel (Map/WeakMap) pour éviter de recalculer les mêmes valeurs.
+            </p>
+
+            <div class="gain-box">
+                <strong>Gain estimé :</strong> UI ×2 à ×5 plus réactive sur les opérations lourdes
+            </div>
+
+            <h4 style="color: var(--emergency-color); margin-top: 18px;"><i class="fas fa-times-circle"></i> Mauvais :</h4>
+            <div class="code-block bad">
+        <pre><code><span class="keyword">function</span> <span class="function">ProductList</span><span class="operator">({</span> <span class="variable">products</span> <span class="operator">})</span> <span class="operator">{</span>
+        <span class="keyword">const</span> <span class="variable">sorted</span> <span class="operator">=</span> <span class="variable">products</span><span class="operator">.</span><span class="function">sort</span><span class="operator">((</span><span class="variable">a</span><span class="operator">,</span> <span class="variable">b</span><span class="operator">)</span> <span class="operator">=&gt;</span> <span class="variable">b</span><span class="operator">.</span><span class="variable">price</span> <span class="operator">-</span> <span class="variable">a</span><span class="operator">.</span><span class="variable">price</span><span class="operator">);</span>
+        <span class="comment">// Re-trie à chaque rendu, même si products n'a pas changé</span>
+        <span class="keyword">return</span> <span class="operator">&lt;</span><span class="variable">div</span><span class="operator">&gt;</span><span class="operator">...</span><span class="operator">&lt;/</span><span class="variable">div</span><span class="operator">&gt;;</span>
+        <span class="operator">}</span></code></pre>
+            </div>
+
+            <h4 style="color: var(--success-color); margin-top: 18px;"><i class="fas fa-check-circle"></i> Bon (React) :</h4>
+            <div class="code-block good">
+        <pre><code><span class="keyword">import</span> <span class="operator">{</span> <span class="variable">useMemo</span> <span class="operator">}</span> <span class="keyword">from</span> <span class="string">'react'</span><span class="operator">;</span>
+
+        <span class="keyword">function</span> <span class="function">ProductList</span><span class="operator">({</span> <span class="variable">products</span> <span class="operator">})</span> <span class="operator">{</span>
+        <span class="keyword">const</span> <span class="variable">sorted</span> <span class="operator">=</span> <span class="function">useMemo</span><span class="operator">(() =&gt;</span> <span class="operator">{</span>
+            <span class="keyword">return</span> <span class="variable">products</span><span class="operator">.</span><span class="function">sort</span><span class="operator">((</span><span class="variable">a</span><span class="operator">,</span> <span class="variable">b</span><span class="operator">)</span> <span class="operator">=&gt;</span> <span class="variable">b</span><span class="operator">.</span><span class="variable">price</span> <span class="operator">-</span> <span class="variable">a</span><span class="operator">.</span><span class="variable">price</span><span class="operator">);</span>
+        <span class="operator">}</span><span class="operator">,</span> <span class="operator">[</span><span class="variable">products</span><span class="operator">]);</span>
+        <span class="comment">// Ne recalcule que si products change</span>
+        <span class="keyword">return</span> <span class="operator">&lt;</span><span class="variable">div</span><span class="operator">&gt;</span><span class="operator">...</span><span class="operator">&lt;/</span><span class="variable">div</span><span class="operator">&gt;;</span>
         <span class="operator">}</span></code></pre>
             </div>
         </div>
         </section>
 
+        <!-- Bonnes pratiques complémentaires - VERSION CORRIGÉE -->
+        <section style="margin-top: 60px; padding: 30px; background: linear-gradient(135deg, rgba(47, 223, 173, 0.1) 0%, rgba(47, 223, 173, 0.02) 100%); border-radius: 10px;">
+            <h2 style="color: var(--primary-color); margin-bottom: 30px;">
+                <i class="fas fa-leaf"></i> Bonnes pratiques complémentaires
+            </h2>
 
+            <div class="practices-grid">
+                
+                <!-- BP 1 : DOM Fragment -->
+                <div class="practice-card">
+                    <h3><i class="fas fa-check-circle"></i> Regrouper les modifications DOM</h3>
+                    <div class="code-block good">
+<pre><code><span class="keyword">const</span> <span class="variable">frag</span> <span class="operator">=</span> <span class="variable">document</span><span class="operator">.</span><span class="function">createDocumentFragment</span><span class="operator">();</span>
+
+<span class="keyword">for</span> <span class="operator">(</span><span class="keyword">let</span> <span class="variable">i</span> <span class="operator">=</span> <span class="string">0</span><span class="operator">;</span> <span class="variable">i</span> <span class="operator">&lt;</span> <span class="variable">items</span><span class="operator">.</span><span class="variable">length</span><span class="operator">;</span> <span class="variable">i</span><span class="operator">++</span><span class="operator">)</span> <span class="operator">{</span>
+  <span class="keyword">const</span> <span class="variable">li</span> <span class="operator">=</span> <span class="variable">document</span><span class="operator">.</span><span class="function">createElement</span><span class="operator">(</span><span class="string">'li'</span><span class="operator">);</span>
+  <span class="variable">li</span><span class="operator">.</span><span class="variable">textContent</span> <span class="operator">=</span> <span class="variable">items</span><span class="operator">[</span><span class="variable">i</span><span class="operator">]</span><span class="operator">;</span>
+  <span class="variable">frag</span><span class="operator">.</span><span class="function">appendChild</span><span class="operator">(</span><span class="variable">li</span><span class="operator">);</span>
+<span class="operator">}</span>
+<span class="variable">list</span><span class="operator">.</span><span class="function">appendChild</span><span class="operator">(</span><span class="variable">frag</span><span class="operator">);</span></code></pre>
+                    </div>
+                    <p>Évite les multiples reflows → 1 seule insertion</p>
+                </div>
+
+                <!-- BP 2 : Délégation d'événements -->
+                <div class="practice-card">
+                    <h3><i class="fas fa-check-circle"></i> Délégation d'événements</h3>
+                    <div class="code-block good">
+<pre><code><span class="variable">container</span><span class="operator">.</span><span class="function">addEventListener</span><span class="operator">(</span><span class="string">'click'</span><span class="operator">,</span> <span class="operator">(</span><span class="variable">e</span><span class="operator">)</span> <span class="operator">=&gt;</span> <span class="operator">{</span>
+  <span class="keyword">const</span> <span class="variable">btn</span> <span class="operator">=</span> <span class="variable">e</span><span class="operator">.</span><span class="variable">target</span><span class="operator">.</span><span class="function">closest</span><span class="operator">(</span><span class="string">'button'</span><span class="operator">);</span>
+  <span class="keyword">if</span> <span class="operator">(!</span><span class="variable">btn</span><span class="operator">)</span> <span class="keyword">return</span><span class="operator">;</span>
+  <span class="function">handleClick</span><span class="operator">(</span><span class="variable">btn</span><span class="operator">);</span>
+<span class="operator">});</span></code></pre>
+                    </div>
+                    <p>1 seul listener au lieu de N → économie mémoire</p>
+                </div>
+
+                <!-- BP 3 : Cache DOM -->
+                <div class="practice-card">
+                    <h3><i class="fas fa-check-circle"></i> Cache des sélecteurs DOM</h3>
+                    <div class="code-block good">
+<pre><code><span class="keyword">const</span> <span class="variable">statusEl</span> <span class="operator">=</span> <span class="variable">document</span><span class="operator">.</span><span class="function">querySelector</span><span class="operator">(</span><span class="string">'#status'</span><span class="operator">);</span>
+
+<span class="keyword">function</span> <span class="function">update</span><span class="operator">(</span><span class="variable">text</span><span class="operator">)</span> <span class="operator">{</span>
+  <span class="variable">statusEl</span><span class="operator">.</span><span class="variable">textContent</span> <span class="operator">=</span> <span class="variable">text</span><span class="operator">;</span>
+<span class="operator">}</span></code></pre>
+                    </div>
+                    <p>Évite les querySelector répétés → moins de CPU</p>
+                </div>
+
+                <!-- BP 4 : WeakMap -->
+                <div class="practice-card">
+                    <h3><i class="fas fa-check-circle"></i> WeakMap pour cache DOM</h3>
+                    <div class="code-block good">
+<pre><code><span class="keyword">const</span> <span class="variable">cache</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">WeakMap</span><span class="operator">();</span>
+
+<span class="keyword">function</span> <span class="function">getMeta</span><span class="operator">(</span><span class="variable">node</span><span class="operator">)</span> <span class="operator">{</span>
+  <span class="keyword">if</span> <span class="operator">(!</span><span class="variable">cache</span><span class="operator">.</span><span class="function">has</span><span class="operator">(</span><span class="variable">node</span><span class="operator">))</span> <span class="operator">{</span>
+    <span class="variable">cache</span><span class="operator">.</span><span class="function">set</span><span class="operator">(</span><span class="variable">node</span><span class="operator">,</span> <span class="operator">{</span>
+      <span class="variable">created</span><span class="operator">:</span> <span class="function">Date</span><span class="operator">.</span><span class="function">now</span><span class="operator">()</span>
+    <span class="operator">}</span><span class="operator">);</span>
+  <span class="operator">}</span>
+  <span class="keyword">return</span> <span class="variable">cache</span><span class="operator">.</span><span class="function">get</span><span class="operator">(</span><span class="variable">node</span><span class="operator">);</span>
+<span class="operator">}</span></code></pre>
+                    </div>
+                    <p>Prévient les fuites mémoire → GC libère les nœuds</p>
+                </div>
+
+                <!-- BP 5 : AbortController -->
+                <div class="practice-card">
+                    <h3><i class="fas fa-check-circle"></i> AbortController pour fetch</h3>
+                    <div class="code-block good">
+<pre><code><span class="keyword">let</span> <span class="variable">ctrl</span><span class="operator">;</span>
+
+<span class="keyword">async</span> <span class="keyword">function</span> <span class="function">search</span><span class="operator">(</span><span class="variable">q</span><span class="operator">)</span> <span class="operator">{</span>
+  <span class="keyword">if</span> <span class="operator">(</span><span class="variable">ctrl</span><span class="operator">)</span> <span class="variable">ctrl</span><span class="operator">.</span><span class="function">abort</span><span class="operator">();</span>
+  <span class="variable">ctrl</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">AbortController</span><span class="operator">();</span>
+
+  <span class="keyword">const</span> <span class="variable">res</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="operator">(</span>
+    <span class="string">`/search?q=${q}`</span><span class="operator">,</span>
+    <span class="operator">{</span> <span class="variable">signal</span><span class="operator">:</span> <span class="variable">ctrl</span><span class="operator">.</span><span class="variable">signal</span> <span class="operator">}</span>
+  <span class="operator">);</span>
+  <span class="keyword">return</span> <span class="variable">res</span><span class="operator">.</span><span class="function">json</span><span class="operator">();</span>
+<span class="operator">}</span></code></pre>
+                    </div>
+                    <p>Annule les requêtes obsolètes → économie réseau</p>
+                </div>
+
+                <!-- BP 6 : Web Workers -->
+                <div class="practice-card">
+                    <h3><i class="fas fa-check-circle"></i> Web Workers pour calculs lourds</h3>
+                    <div class="code-block good">
+<pre><code><span class="keyword">const</span> <span class="variable">worker</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="function">Worker</span><span class="operator">(</span><span class="string">'heavy-calc.js'</span><span class="operator">);</span>
+
+<span class="variable">worker</span><span class="operator">.</span><span class="function">postMessage</span><span class="operator">(</span><span class="variable">largeData</span><span class="operator">);</span>
+
+<span class="variable">worker</span><span class="operator">.</span><span class="variable">onmessage</span> <span class="operator">=</span> <span class="operator">(</span><span class="variable">e</span><span class="operator">)</span> <span class="operator">=&gt;</span> <span class="operator">{</span>
+  <span class="function">displayResults</span><span class="operator">(</span><span class="variable">e</span><span class="operator">.</span><span class="variable">data</span><span class="operator">);</span>
+<span class="operator">}</span><span class="operator">;</span></code></pre>
+                    </div>
+                    <p>Libère le thread principal → UI fluide</p>
+                </div>
+
+            </div>
+        </section>
 
         <div class="button-container"
             style="margin-top: 60px; gap: 15px; display: flex; flex-wrap: wrap; justify-content: center;">
